@@ -6,8 +6,11 @@ var productHelpers = require('../helpers/product-helpers')
 router.get('/', function (req, res, next) {
   productHelpers.getAllProducts().then((products) => {
     console.log(products)
-    res.render('user/', { admin: true })
+    res.render('user/', { products })
   })
 });
+router.get('/login', (req, res) => {
+  res.render('user/login')
+})
 
 module.exports = router;
