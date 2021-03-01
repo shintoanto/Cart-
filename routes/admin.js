@@ -1,3 +1,4 @@
+const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 var productHelpers = require('../helpers/product-helpers')
@@ -30,5 +31,22 @@ router.post('/add-product', (req, res) => {
     res.render('admin/add-product')
   })
 })
-
+router.get('/delete-product/:', (req, res) => {
+  let proId = req.query.id
+  productHelpers.deleteProduct(proId).then((response) => {
+    res.redirect('/admin/')
+  })
+})
+router.get('/edit-product/:id', async (req, res) => {
+  let product = await productHelpers.getProductDetails(req.params.id)
+  res.render('/admin/edit-product', { product })
+})
+router.get('/edit-product/:id', async (req, res) => {
+  productHelpers.updateProduct(req.params, req.body)
+})
+router.post('/edit-product/:id',(req,res)=>{
+  productHelpers.updateProduct(req.params.id,req.body).then(()=>{
+    
+  })
+})
 module.exports = router;
