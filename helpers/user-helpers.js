@@ -34,23 +34,29 @@ module.exports = {
             }
         })
     }, addToCart: (proId, userId) => {
+        let proObj = {
+            item: objectId(proId),
+            quantity: 1
+        }
         return new Promise(async (resolve, reject) => {
             let userCart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) })
             if (userCart) {
-                db.get().collection(collection.CART_COLLECTION)
-                    .updateOne({ user: objectId(userId) },
-                        {
-                            $set: {
-                                $push: { products: objectId(proId) }
-                            }
-                        }
-                    ).then((response) => {
-                        resolve()
-                    })
+                let proExist=userCart.products.findIndex(product.item==proId)
+                console.log(proExist)
+                // db.get().collection(collection.CART_COLLECTION)
+                //     .updateOne({ user: objectId(userId) },
+                //         {
+
+                //             $push: { products: proObj }
+
+                //         }
+                //     ).then((response) => {
+                //         resolve()
+                //     })
             } else {
                 let cartObj = {
                     user: objectId(userId),
-                    products: [objectId(proId)]
+                    products: [proObj]
                 }
                 db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response) => {
                     resolve()
@@ -78,6 +84,16 @@ module.exports = {
                 }
             ]).toArray()
             resolve(cartItems[0].cartItems)
+        })
+    },
+    getCartCount: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let count = 0
+            let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) })
+            if (cart) {
+                count = cart.products.length
+            }
+            resolve(count)
         })
     }
 }   
