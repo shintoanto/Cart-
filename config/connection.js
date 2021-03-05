@@ -1,4 +1,4 @@
-const mongoClient = require('mongodb').mongoClient;
+const mongoClient = require('mongodb').MongoClient;
 const state = {
     db: null
 }
