@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(fileUpload())
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: "key", cookie: { maxAge: 60000 } }))
+app.use(session({ secret: "Key", cookie: { maxAge: 60000 } }))
 db.connect((err) => {
   if (err) console.log('Connection Error' + err);
   else console.log('Database connected port 27017');
