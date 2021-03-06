@@ -23,7 +23,7 @@ router.get('/', async function (req, res, next) {
 
   productHelpers.getAllProducts().then((products) => {
     console.log(products)
-    res.render('user/', { products, user })
+    res.render('user/view-products', { products, user })
   })
 });
 router.get('/login', (req, res) => {
