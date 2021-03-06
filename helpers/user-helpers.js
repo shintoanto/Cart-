@@ -1,5 +1,5 @@
 var db = require('../config/connection')
-var collections = require('../config/collections')
+var collection = require('../config/collections')
 const bcrypt = require('bcrypt')
 const { response } = require('express')
 const { MethodNotAllowed } = require('http-errors')
