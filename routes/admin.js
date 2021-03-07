@@ -30,29 +30,27 @@ router.post('/add-product', (req, res) => {
     res.render('admin/add-product')
   })
 })
-router.get('/delete-product/:', (req, res) => {
-  let proId = req.query.id
+router.get('/delete-product/:id', (req, res) => {
+  let proId = req.params.id
+  console.log(proId)
   productHelpers.deleteProduct(proId).then((response) => {
     res.redirect('/admin/')
   })
 })
 router.get('/edit-product/:id', async (req, res) => {
   let product = await productHelpers.getProductDetails(req.params.id)
-  res.render('/admin/edit-product', { product })
+  res.render('admin/edit-product', { product })
 })
-router.get('/edit-product/:id', async (req, res) => {
-  productHelpers.updateProduct(req.params, req.body)
-})
+// router.get('/edit-product/:id', async (req, res) => {
+//   productHelpers.updateProduct(req.params, req.body)
+// })
 router.post('/edit-product/:id', (req, res) => {
-  console.log(req.params.id);
   let id = req.params.id
   productHelpers.updateProduct(req.params.id, req.body).then(() => {
     res.redirect('/admin')
     if (req.files.Image) {
       let image = req.files.Image
       image.mv('./public/product-images/' + id + '.jpg')
-
-
     }
   })
 })
