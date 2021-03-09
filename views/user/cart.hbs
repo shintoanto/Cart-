@@ -5,20 +5,23 @@
         <table class="table mt-5">
             <thead>
                 <tr>
-
-                    <th scope="col">Item</th> 
+                    <th scope="col">Item</th>
                     <th scope="col">Title</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each products}}
                 <tr>
 
+                  
                     <td><img style="width:70px;height:70px" src="/product-images/{{this.product._id}}.jpg"></td>
+                   
+                    
                     <td>{{this.product.Name}}</td>
-                    <td>Rs.{{this.product.Price}</td>
-
+                    <td>Rs.{{this.product.Price}}</td>
+                   
                     <td>
                         <button class="cart-item-count mr-3"
                             onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',1)">-</button>
@@ -61,7 +64,7 @@
                         location.reload()
                     } else {
                         document.getElementById(proId).innerHTML = quantity + count
-                        document.getElementById(total).innerHTML = response.total
+                        document.getElementById('total').innerHTML = response.total
                     }
                 }
             }

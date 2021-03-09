@@ -16,14 +16,13 @@
 
                         <label for="">Mobile</label>
                         <input class="form-control" type="text" id="mobile" name="mobile">
-
                         <input type="text" name="userId" id="" value="{{user._id}}" hidden></input>
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="container mt-5 ml-5 checkout">
-                        <h5>Total Amount : Rs.3{{Total}}</h5>
+                        <h5>Total Amount : Rs.{{total}}</h5>
                         <hr>
                         <div class="payment">
                             <p>Payment Method</p>
@@ -46,6 +45,7 @@
 
     </div>
 </section>
+
 <script>
     $('#checkout-form').submit((e) => {
         e.preventDefault()
@@ -55,12 +55,80 @@
             data: $('#checkout-form').serialize(),
             success: (response) => {
                 alert(response)
-                if(response.status){
-                    location.href='/order-success'
+                if (response.codSuccess) {
+                    location.href = '/order-success'
+                } else {
+                    razorpayPayment(response)
                 }
             }
 
         })
     })
 
-</script>
+    function razorpayPayment(order) {
+        var options = {
+            "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Acme Corp",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+    function verifyPayment(payment, order) {
+        $.ajax({
+            url: '/verify-payment',
+            data: {
+                payment,
+                order
+            }, method: 'post',
+            success: (response) => {
+                if (response.status) {
+                    location.href = '/order-success'
+                }else{
+                    alert("Payment failed")
+                }
+            }
+        })
+    }
+</script>   
+
+<style>
+    input [type=radio] {
+        width: 20px;
+        height: 20px;
+    }
+
+    label.radio-inline {
+        display: flex;
+        align-items: center;
+    }
+
+    .checkout {
+        border: 1px solid;
+        border-radius: 3px;
+        padding: 30px;
+    }
+
+    .payment {
+        padding-bottom: 16px;
+    }
+</style>
