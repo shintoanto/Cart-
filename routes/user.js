@@ -60,7 +60,7 @@ router.post('/login', (req, res) => {
       req.session.userLoginErr = 'Invalid password or user name'
       res.redirect('/login')
     }
-  })s
+  })
 })
 router.get('/logout', (req, res) => {
 
